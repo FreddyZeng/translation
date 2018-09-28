@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding=utf-8 -*-
 
 """
 translation
@@ -29,7 +30,11 @@ def convert_encoding(filename, target_encoding):
     with open(filename, 'rb') as source_file:
         content = source_file.read()
         source_encoding = chardet.detect(content)['encoding']
-        # print(source_encoding, filename)
+        language = chardet.detect(content)['language']
+        if source_encoding == 'Windows-1254' :
+            # 項目中個別個文件，utf-8識別成Windows-1254，暫時這樣修復處理
+            source_encoding='utf-8'
+        print(source_encoding, filename, chardet.detect(content))
         if source_encoding != target_encoding:
             content = content.decode(source_encoding) #.encode(source_encoding)
             if content == None:
