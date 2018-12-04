@@ -83,13 +83,13 @@ def main():
             result = pattern.findall(text)
             if changeencode != 1:
                 for chineseString in result:
-                    converter = opencc.OpenCC(config='s2tw.json', opencc_path='/usr/local/bin/opencc')
+                    converter = opencc.OpenCC(config='s2twp.json', opencc_path='/usr/local/bin/opencc')
                     didConverString = converter.convert(chineseString)
                     if len(didConverString) < 1:
                         console.print_fail('转换失败了，请撤销改动')
                         exit(1)
                     text = re.sub(chineseString, didConverString, text)
-                    print(chineseString + "\t转换成\t" + didConverString)
+                    print(chineseString + "\tconver to\t" + didConverString)
 
             with open(assets_path, 'w',encoding ='utf-8') as write_source_file:
                 write_source_file.write(text)
