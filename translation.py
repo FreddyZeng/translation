@@ -72,27 +72,33 @@ def main():
     pattern = re.compile(r'[\u4E00-\u9FA5]+[^"]*?')
     if changeencode == 1:
         print("轉換文件編碼為utf-8")
+
     for assets_path in assets_paths:
-        convert_encoding(assets_path, 'utf-8')
-        with open(assets_path, 'r',encoding ='utf-8') as read_source_file:
-            text = read_source_file.read()
-            text = re.sub(r'å¹´', "年", text)
-            text = re.sub(r'Â©', "©", text)
-            text = re.sub(r'â€™', "’", text)
+        print(assets_path)
+        try:
+            os.chmod(assets_path, "777")
+            convert_encoding(assets_path, 'utf-8')
+            with open(assets_path, 'r',encoding ='utf-8') as read_source_file:
+                text = read_source_file.read()
+                text = re.sub(r'å¹´', "年", text)
+                text = re.sub(r'Â©', "©", text)
+                text = re.sub(r'â€™', "’", text)
 
-            result = pattern.findall(text)
-            if changeencode != 1:
-                for chineseString in result:
-                    converter = opencc.OpenCC(config='s2twp.json', opencc_path='/usr/local/bin/opencc')
-                    didConverString = converter.convert(chineseString)
-                    if len(didConverString) < 1:
-                        console.print_fail('转换失败了，请撤销改动')
-                        exit(1)
-                    text = re.sub(chineseString, didConverString, text)
-                    print(chineseString + "\tconver to\t" + didConverString)
+                result = pattern.findall(text)
+                if changeencode != 1:
+                    for chineseString in result:
+                        converter = opencc.OpenCC(config='s2twp.json', opencc_path='/usr/local/bin/opencc')
+                        didConverString = converter.convert(chineseString)
+                        if len(didConverString) < 1:
+                            console.print_fail('转换失败了，请撤销改动')
+                            exit(1)
+                        text = re.sub(chineseString, didConverString, text)
+                        print(chineseString + "\tconver to\t" + didConverString)
 
-            with open(assets_path, 'w',encoding ='utf-8') as write_source_file:
-                write_source_file.write(text)
+                with open(assets_path, 'w',encoding ='utf-8') as write_source_file:
+                    write_source_file.write(text)
+        except:
+                pass
     if changeencode == 1:
         console.print_green('文件编码改utf-8完成')
     else:
