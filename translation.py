@@ -75,8 +75,8 @@ def main():
 
     for assets_path in assets_paths:
         print(assets_path)
+        os.chmod(assets_path, 777)
         try:
-            os.chmod(assets_path, "777")
             convert_encoding(assets_path, 'utf-8')
             with open(assets_path, 'r',encoding ='utf-8') as read_source_file:
                 text = read_source_file.read()
